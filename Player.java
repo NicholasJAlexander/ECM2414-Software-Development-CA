@@ -3,20 +3,41 @@ package ContinuousAssessment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Queue;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Player extends CardDeck{
 
     int playerNumber;
     CardDeck leftDeck;
     CardDeck rightDeck;
+    String saveLocation;
 
     Player(int pNumber, CardDeck d, CardDeck lDeck, CardDeck rDeck) {
         super(d);
         this.playerNumber = pNumber;
         this.leftDeck = lDeck;
         this.rightDeck = rDeck;
+        this.saveLocation = "Logs" + File.separator + "player" + pNumber + "_output.txt";
 
-        
+        // initialise logs folder and file
+        try {
+            // create file variable
+            File logFile = new File(this.saveLocation);
+            logFile.getParentFile().mkdirs();
+            if (!logFile.createNewFile()) {
+                BufferedWriter bWriter = new BufferedWriter(new FileWriter(this.saveLocation));
+                System.out.println("save location: " + this.saveLocation);
+                // initialise file
+                bWriter.write("Player " + pNumber + " created.");
+                bWriter.close();
+            }
+        } catch (IOException e) {
+            System.out.printf("An output file for player" + pNumber + " has not been created.");
+        }
+
     }
 
     static boolean allSameCards(Queue<Card> cs) {
@@ -31,6 +52,10 @@ public class Player extends CardDeck{
         return same;
     };
 
+    void writeFile() {
+
+    }
+
     Card drawCard() {
         // takes a card from the players respective deck
         // print drawn card info
@@ -41,6 +66,17 @@ public class Player extends CardDeck{
         // discards unwanted card
         // print discard info
         this.rightDeck.placeCardOnBottom(c);
+    }
+
+    private void logOutput(String msg) {
+        try {
+            BufferedWriter bWriter = new BufferedWriter(new FileWriter(this.saveLocation, true));
+            bWriter.newLine();
+            bWriter.write(msg);
+            bWriter.close();
+        } catch (IOException e) {
+            System.out.println("Error:" + e);
+        }
     }
 
     void playGo() {
@@ -55,11 +91,13 @@ public class Player extends CardDeck{
         }
         // discards a non prefered card
         this.discardCard(this.deck.poll());
+        logOutput("Card discard message");
 
         // draws card and add to players deck
         Card drawn = this.drawCard();
         this.deck.add(drawn);
-        
+        logOutput("Card drawn message");
+
         if (allSameCards(this.deck)) {
             // player wins here
         } else {

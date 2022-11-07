@@ -1,5 +1,6 @@
 package ContinuousAssessment;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,6 +16,11 @@ public class CardDeck {
         this.deckNumber = dNumber;
     }
 
+    // empty constructor to initialise new list
+    CardDeck(){
+        this.deck = new LinkedList<>();
+    }
+
     CardDeck (CardDeck d) {
         this.deck = d.deck;
         this.deckNumber = d.deckNumber;
@@ -28,6 +34,10 @@ public class CardDeck {
     void placeCardOnBottom(Card c) {
         // places card to the bottom of the deck
         deck.add(c);
+    }
+
+    public String toString(){
+        return "Pack values: " + Arrays.toString(deck.toArray());
     }
 
 }
