@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class CardGame {
 
     Pack p;
+    ArrayList<Players> players;
+    ArratList<CardDecks> decks;
 
     CardGame(int n, String file) throws IOException {
         p = new Pack(n, file);
@@ -18,26 +20,42 @@ public class CardGame {
     }
 
     void dealCards(int n, Pack p) {
-        // deals out the cars in pack
+        // deals out the cards in pack, pack should have 8n cards in it
 
         // ArrayList<Player> playerList = new ArrayList<>();
         ArrayList<CardDeck> individualDecks = new ArrayList<>();
 
-
-        // init the n players decks
-        for (int i = 0; i < n; i++) {
-            individualDecks.add(new CardDeck());
+        // init the 2n decks, first n for players, final n for decks
+        // player decks numbered 0..n, decks also numbered 0..n
+        for (int i = 0; i < 2*n; i++) {
+            individualDecks.add(new CardDeck(i%n));
         }
 
-        // populate the n decks by placing the card on the bottom and popping the card from the pack
-        for (int i = 0; i < n * 4; i++) {
-            individualDecks.get(i % n).placeCardOnBottom(p.popCard());
+        // populates 2n decks by placing the card on the bottom and popping the card from the pack,
+        // first n decks are for the players (dealt to first), last n decks are for the decks between players
+        for (int index=0; index<2*n; index = index+n) {
+            // deals to players, then to decks
+            for (int i = 0; i < n * 4; i++) {
+                individualDecks.get(index +(i % n)).placeCardOnBottom(p.popCard());
+            }
         }
 
-        // give players their cards
-//        for (int i = 0; i < n; i++) {
-//            playerList.add(new Player())
-//        }
+        for (int i = 0; i<n; i++) {
+            CardDeck playersDeck = individualDecks.get(i);
+            CardDeck leftDeck = individualDecks.get(n + i);
+            CardDeck rightDeck = individualDecks.get(n + (i+1)%n);
+            this.players.add(
+                // playersDeck already has a deckNuber - this is the players number
+                new Player(
+                    d=playersDeck,
+                    lDeck = leftDeck,
+                    rDeck = rightDeck
+                )
+            );
+            // adds deck to games deck list
+            this.decks.add(leftDeck);
+        }
+
 
         for (CardDeck individualDeck : individualDecks) {
             System.out.println(individualDeck);
