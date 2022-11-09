@@ -6,7 +6,7 @@ import java.util.Queue;
 
 public class CardDeck {
 
-    int deckNumber;
+    private int deckNumber;
 
     // a queue avoids the game stagnating for the player
     protected Queue<Card> deck = new LinkedList<>();
@@ -17,8 +17,9 @@ public class CardDeck {
     }
 
     // empty constructor to initialise new list
-    CardDeck(){
+    CardDeck(int i){
         this.deck = new LinkedList<>();
+        this.deckNumber = i;
     }
 
     CardDeck (CardDeck d) {

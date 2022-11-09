@@ -15,9 +15,10 @@ public class Player extends CardDeck{
     CardDeck rightDeck;
     String saveLocation;
 
-    Player(int pNumber, CardDeck d, CardDeck lDeck, CardDeck rDeck) {
+    Player(CardDeck d, CardDeck lDeck, CardDeck rDeck) {
         super(d);
-        this.playerNumber = pNumber;
+        this.d = d;
+        this.playerNumber = this.deckNumber;
         this.leftDeck = lDeck;
         this.rightDeck = rDeck;
         this.saveLocation = "Logs" + File.separator + "player" + pNumber + "_output.txt";
@@ -59,13 +60,18 @@ public class Player extends CardDeck{
     Card drawCard() {
         // takes a card from the players respective deck
         // print drawn card info
-        return this.leftDeck.takeCardFromTop();
+        Card c = this.leftDeck.takeCardFromTop();
+        String drawsmsg = String.format("player %d draws a %d from deck %d", this.playerNumber, c.getValue(), this.rightDeck.deckNumber);
+        logOutput(drawsmsg);
+        return c;
     }
 
     void discardCard (Card c) {
         // discards unwanted card
         // print discard info
         this.rightDeck.placeCardOnBottom(c);
+        String discardmsg = String.format("player %d discards a %d from deck %d", this.playerNumber, c.getValue(), this.leftDeck.deckNumber);
+        logOutput(discardmsg);
     }
 
     private void logOutput(String msg) {
@@ -90,19 +96,20 @@ public class Player extends CardDeck{
             this.deck.add(this.deck.poll());
         }
         // discards a non prefered card
-        this.discardCard(this.deck.poll());
-        logOutput("Card discard message");
+        Card discard = this.deck.poll();
+        this.discardCard(c);
 
         // draws card and add to players deck
         Card drawn = this.drawCard();
         this.deck.add(drawn);
-        logOutput("Card drawn message");
+        
 
         if (allSameCards(this.deck)) {
             // player wins here
-        } else {
-            // players go is over
-        }    
+            String p = String.format("player %d " + this.playerNumber);
+            String msg = p + "wins\n" + p + "exits\n" + p + String.format("current hand is %s",this.getOrderedHand());
+            logOutPut(msg);
+        }
     }
 
     int[] getOrderedHand() {
