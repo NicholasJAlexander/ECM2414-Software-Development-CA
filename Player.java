@@ -17,11 +17,11 @@ public class Player extends CardDeck{
 
     Player(CardDeck d, CardDeck lDeck, CardDeck rDeck) {
         super(d);
-        this.d = d;
+//        this.d = d;
         this.playerNumber = this.deckNumber;
         this.leftDeck = lDeck;
         this.rightDeck = rDeck;
-        this.saveLocation = "Logs" + File.separator + "player" + pNumber + "_output.txt";
+        this.saveLocation = "Logs" + File.separator + "player" + this.playerNumber + "_output.txt";
 
         // initialise logs folder and file
         try {
@@ -32,11 +32,11 @@ public class Player extends CardDeck{
                 BufferedWriter bWriter = new BufferedWriter(new FileWriter(this.saveLocation));
                 System.out.println("save location: " + this.saveLocation);
                 // initialise file
-                bWriter.write("Player " + pNumber + " created.");
+                bWriter.write("Player " + this.playerNumber + " created.");
                 bWriter.close();
             }
         } catch (IOException e) {
-            System.out.printf("An output file for player" + pNumber + " has not been created.");
+            System.out.printf("An output file for player" + this.playerNumber + " has not been created.");
         }
 
     }
@@ -97,7 +97,7 @@ public class Player extends CardDeck{
         }
         // discards a non prefered card
         Card discard = this.deck.poll();
-        this.discardCard(c);
+        this.discardCard(discard);
 
         // draws card and add to players deck
         Card drawn = this.drawCard();
@@ -108,7 +108,7 @@ public class Player extends CardDeck{
             // player wins here
             String p = String.format("player %d " + this.playerNumber);
             String msg = p + "wins\n" + p + "exits\n" + p + String.format("current hand is %s",this.getOrderedHand());
-            logOutPut(msg);
+            logOutput(msg);
         }
     }
 

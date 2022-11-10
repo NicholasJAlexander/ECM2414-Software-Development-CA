@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class CardGame {
 
     Pack p;
-    ArrayList<Players> players;
-    ArratList<CardDecks> decks;
+    ArrayList<Player> players;
+    ArrayList<CardDeck> decks;
 
     CardGame(int n, String file) throws IOException {
         p = new Pack(n, file);
@@ -36,6 +36,7 @@ public class CardGame {
         for (int index=0; index<2*n; index = index+n) {
             // deals to players, then to decks
             for (int i = 0; i < n * 4; i++) {
+                System.out.println("index: " + index + " index + (i % n): " + (index + (i % n)));
                 individualDecks.get(index +(i % n)).placeCardOnBottom(p.popCard());
             }
         }
@@ -47,9 +48,9 @@ public class CardGame {
             this.players.add(
                 // playersDeck already has a deckNuber - this is the players number
                 new Player(
-                    d=playersDeck,
-                    lDeck = leftDeck,
-                    rDeck = rightDeck
+                    playersDeck,
+                    leftDeck,
+                    rightDeck
                 )
             );
             // adds deck to games deck list
