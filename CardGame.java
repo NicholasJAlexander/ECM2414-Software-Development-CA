@@ -25,6 +25,10 @@ public class CardGame {
         // ArrayList<Player> playerList = new ArrayList<>();
         ArrayList<CardDeck> individualDecks = new ArrayList<>();
 
+        // initialise list
+        players = new ArrayList<>();
+        decks = new ArrayList<>();
+
         // init the 2n decks, first n for players, final n for decks
         // player decks numbered 0..n, decks also numbered 0..n
         for (int i = 0; i < 2*n; i++) {
