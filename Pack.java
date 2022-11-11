@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class Pack{
+public class Pack {
 
     // has implementation to take check if plain text file is a valid input pack
     // reads the files values into a linked list 

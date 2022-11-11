@@ -14,6 +14,7 @@ public class Player extends CardDeck{
     CardDeck leftDeck;
     CardDeck rightDeck;
     String saveLocation;
+    Boolean playerWon;
 
     Player(CardDeck d, CardDeck lDeck, CardDeck rDeck) {
         super(d);
@@ -22,6 +23,7 @@ public class Player extends CardDeck{
         this.leftDeck = lDeck;
         this.rightDeck = rDeck;
         this.saveLocation = "Logs" + File.separator + "player" + this.playerNumber + "_output.txt";
+        this.playerWon = allSameCards(this.cards);
 
         // initialise logs folder and file
         try {
@@ -38,6 +40,9 @@ public class Player extends CardDeck{
         } catch (IOException e) {
             System.out.printf("An output file for player" + this.playerNumber + " has not been created.");
         }
+        // outputs initial message
+        String initialMsg = String.format("player %d initial hand %s", this.getOrderedHand());
+        this.logOutput(initialMsg);
 
     }
 
@@ -57,21 +62,31 @@ public class Player extends CardDeck{
 
     }
 
-    Card drawCard() {
+    void drawCardFromDeck() {
         // takes a card from the players respective deck
         // print drawn card info
         Card c = this.leftDeck.takeCardFromTop();
-        String drawsmsg = String.format("player %d draws a %d from deck %d", this.playerNumber, c.getValue(), this.rightDeck.deckNumber);
-        logOutput(drawsmsg);
-        return c;
+        String drawsMsg = String.format("player %d draws a %d from deck %d", this.playerNumber, c.getValue(), this.rightDeck.deckNumber);
+        logOutput(drawsMsg);
+        this.cards.add(c);
     }
 
-    void discardCard (Card c) {
-        // discards unwanted card
+    void discardCardToDeck() {
+        // cycles players cards to avoid dicarding a prefered card
+        while (p.cards.peek().getValue() == p.playerNumber) {
+            // removes card from top and places on bottom of deck, this only happens if
+            // the card value is the preffered value
+            p.cards.add(p.cards.poll());
+        }
+
+        // discards a non prefered card
+        Card discard = p.cards.poll();
+        p.discardCard(discard);
+
         // print discard info
-        this.rightDeck.placeCardOnBottom(c);
-        String discardmsg = String.format("player %d discards a %d from deck %d", this.playerNumber, c.getValue(), this.leftDeck.deckNumber);
-        logOutput(discardmsg);
+        this.rightDeck.placeCardOnBottom(discard);
+        String discardMsg = String.format("player %d discards a %d from deck %d", this.playerNumber, discard.getValue(), this.leftDeck.deckNumber);
+        logOutput(discardMsg);
     }
 
     private void logOutput(String msg) {
@@ -85,37 +100,35 @@ public class Player extends CardDeck{
         }
     }
 
-    void playGo() {
+    static synchronized void playGo(Player p) {
 
-        //the order of drawing and discarding cards doesn't matter
+        // skip go if players left deck is empyt
+        if (p.cards.size() == 0) {return;}
 
-        // cycles players cards to avoid dicarding a prefered card
-        while (this.deck.peek().getValue() == this.playerNumber) {
-            // removes card from top and places on bottom of deck, this only happens if
-            // the card value is the preffered value
-            this.deck.add(this.deck.poll());
-        }
-        // discards a non prefered card
-        Card discard = this.deck.poll();
-        this.discardCard(discard);
-
-        // draws card and add to players deck
-        Card drawn = this.drawCard();
-        this.deck.add(drawn);
+        // draws card from left deck and add to back of players deck
+        p.drawCardFromDeck();
         
+        //discards non preferred card, places on right deck
+        p.discardCardToDeck();
 
-        if (allSameCards(this.deck)) {
+        String currentHandMsg = String.format("player %d current hand is %s",p.playerNumber,p.getOrderedHand());
+        p.logOutput(currentHandMsg);
+        
+        // check if player has won
+        p.playerWon = allSameCards(p.cards);
+
+        if (p.playerWon) {
             // player wins here
-            String p = String.format("player %d " + this.playerNumber);
-            String msg = p + "wins\n" + p + "exits\n" + p + String.format("current hand is %s",this.getOrderedHand());
-            logOutput(msg);
+            String pN = String.format("player %d " + p.playerNumber);
+            String msg = p + "wins\n" + pN + "exits\n" + pN + String.format("final hand is %s",p.getOrderedHand());
+            p.logOutput(msg);
         }
     }
 
     int[] getOrderedHand() {
         // orderes hand
         ArrayList<Integer> arr = new ArrayList<Integer>();
-        for (Card c: this.deck) {
+        for (Card c: this.cards) {
             arr.add(c.getValue());
         }
         Collections.sort(arr);
