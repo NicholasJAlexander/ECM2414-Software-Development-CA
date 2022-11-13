@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import static ContinuousAssessment.Player.playGo;
 
 public class CardGame {
 
@@ -15,8 +19,39 @@ public class CardGame {
         p = new Pack(n, file);
 
         dealCards(n, p);
+
+        for (Player individualPlayer : players) {
+            System.out.println(individualPlayer);
+        }
+
+
+        for (CardDeck individualDeck : decks) {
+            System.out.println(individualDeck);
+        }
+
+        for (Player ip: players) {
+            Thread thread = new Thread(ip);
+            thread.start();
+        }
+
+        for (Player ip: players) {
+            if (ip.playerWon) {
+                System.out.println("Player: " + ip.playerNumber + " has won");
+            }
+        }
+
+
         // players
         // decks 
+    }
+
+    boolean checkWin() {
+        for (Player ip: players) {
+            if (ip.playerWon) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void dealCards(int n, Pack p) {
@@ -40,7 +75,7 @@ public class CardGame {
         for (int index=0; index<2*n; index = index+n) {
             // deals to players, then to decks
             for (int i = 0; i < n * 4; i++) {
-                System.out.println("index: " + index + " index + (i % n): " + (index + (i % n)));
+//                System.out.println("index: " + index + " index + (i % n): " + (index + (i % n)));
                 individualDecks.get(index +(i % n)).placeCardOnBottom(p.popCard());
             }
         }
@@ -62,9 +97,7 @@ public class CardGame {
         }
 
 
-        for (CardDeck individualDeck : individualDecks) {
-            System.out.println(individualDeck);
-        }
+
         /*
             Pack values: [1, 1, 2, 2]
             Pack values: [1, 1, 2, 2]
@@ -76,9 +109,6 @@ public class CardGame {
         // deal cards each player
 
     }
-
-
-
 
     public static void main(String args[]) {
         try {

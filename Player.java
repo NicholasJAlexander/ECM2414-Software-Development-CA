@@ -8,18 +8,20 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Player extends CardDeck{
+public class Player extends CardDeck implements Runnable{
 
     int playerNumber;
     CardDeck leftDeck;
     CardDeck rightDeck;
     String saveLocation;
     Boolean playerWon;
+    int initialDeckSize;
 
     Player(CardDeck d, CardDeck lDeck, CardDeck rDeck) {
         super(d);
 //        this.d = d;
-        this.playerNumber = this.deckNumber;
+        this.initialDeckSize = d.size();
+        this.playerNumber = this.deckNumber + 1;
         this.leftDeck = lDeck;
         this.rightDeck = rDeck;
         this.saveLocation = "Logs" + File.separator + "player" + this.playerNumber + "_output.txt";
@@ -41,21 +43,22 @@ public class Player extends CardDeck{
             System.out.printf("An output file for player" + this.playerNumber + " has not been created.");
         }
         // outputs initial message
-        String initialMsg = String.format("player %d initial hand %s", this.getOrderedHand());
+        String initialMsg = String.format("player %d initial hand %s", this.playerNumber, this.getOrderedHand());
         this.logOutput(initialMsg);
 
     }
 
     static boolean allSameCards(Queue<Card> cs) {
         // loop hand queue and check if all the cards are the same number
-        // the loop queue and remove all card of number 
-        Card prevCard = cs.peek();
-        boolean same = true;
+        // the loop queue and remove all card of number
+        int val = cs.peek().getValue();
+
         for (Card c: cs) {
-            same &= (c == prevCard);
-            prevCard = c;
+            if (c.getValue() != val) {
+                return false;
+            }
         }
-        return same;
+        return true;
     };
 
     void writeFile() {
@@ -66,12 +69,16 @@ public class Player extends CardDeck{
         // takes a card from the players respective deck
         // print drawn card info
         Card c = this.leftDeck.takeCardFromTop();
+        if (c == null) {
+            // theres no cards in the left deck
+            return;
+        }
         String drawsMsg = String.format("player %d draws a %d from deck %d", this.playerNumber, c.getValue(), this.rightDeck.deckNumber);
         logOutput(drawsMsg);
         this.cards.add(c);
     }
 
-    void discardCardToDeck() {
+    void discardCardToDeck(Player p) {
         // cycles players cards to avoid dicarding a prefered card
         while (p.cards.peek().getValue() == p.playerNumber) {
             // removes card from top and places on bottom of deck, this only happens if
@@ -81,7 +88,7 @@ public class Player extends CardDeck{
 
         // discards a non prefered card
         Card discard = p.cards.poll();
-        p.discardCard(discard);
+//        p.discardCard(discard);
 
         // print discard info
         this.rightDeck.placeCardOnBottom(discard);
@@ -93,6 +100,7 @@ public class Player extends CardDeck{
         try {
             BufferedWriter bWriter = new BufferedWriter(new FileWriter(this.saveLocation, true));
             bWriter.newLine();
+            System.out.println("output: " + msg);
             bWriter.write(msg);
             bWriter.close();
         } catch (IOException e) {
@@ -100,16 +108,17 @@ public class Player extends CardDeck{
         }
     }
 
-    static synchronized void playGo(Player p) {
+
+    public static synchronized void playGo(Player p) {
 
         // skip go if players left deck is empyt
         if (p.cards.size() == 0) {return;}
-
+        System.out.println("\n");
         // draws card from left deck and add to back of players deck
         p.drawCardFromDeck();
         
         //discards non preferred card, places on right deck
-        p.discardCardToDeck();
+        p.discardCardToDeck(p);
 
         String currentHandMsg = String.format("player %d current hand is %s",p.playerNumber,p.getOrderedHand());
         p.logOutput(currentHandMsg);
@@ -117,21 +126,39 @@ public class Player extends CardDeck{
         // check if player has won
         p.playerWon = allSameCards(p.cards);
 
-        if (p.playerWon) {
+        if (p.playerWon && p.initialDeckSize == p.cards.size()) {
             // player wins here
-            String pN = String.format("player %d " + p.playerNumber);
-            String msg = p + "wins\n" + pN + "exits\n" + pN + String.format("final hand is %s",p.getOrderedHand());
+            String pN = String.format("player " + p.playerNumber);
+            String msg = "Player " + p.playerNumber + " wins\n" + pN + " exits\n" + pN + String.format(" final hand is %s",p.getOrderedHand());
             p.logOutput(msg);
         }
     }
 
-    int[] getOrderedHand() {
+    ArrayList<Integer> getOrderedHand() {
         // orderes hand
         ArrayList<Integer> arr = new ArrayList<Integer>();
         for (Card c: this.cards) {
             arr.add(c.getValue());
         }
         Collections.sort(arr);
-        return arr.stream().mapToInt(Integer::intValue).toArray();
+        return arr;
+    }
+
+    @Override
+    public String toString() {
+        return "\nPlayer number  : " + this.playerNumber +
+                "\nPlayer deck    : " + this.getOrderedHand() +
+                "\nDeck no " + this.leftDeck.deckNumber + " ldeck: " + this.leftDeck +
+                "\nDeck no " + this.rightDeck.deckNumber + " rdeck: " + this.rightDeck +
+                "\n";
+    }
+
+
+    @Override
+    public void run() {
+        // thread
+        while (!this.playerWon) {
+            playGo(this);
+        }
     }
 }

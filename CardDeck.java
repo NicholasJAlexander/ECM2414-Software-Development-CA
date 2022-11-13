@@ -37,8 +37,16 @@ public class CardDeck {
         this.cards.add(c);
     }
 
+    public int size() {
+        return this.cards.size();
+    }
+
     public String toString(){
-        return "Pack values: " + Arrays.toString(this.cards.toArray());
+        return "" + Arrays.toString(this.cards.toArray());
+    }
+
+    public Queue<Card> getCards() {
+        return cards;
     }
 
     // not used currently
