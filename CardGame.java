@@ -67,7 +67,7 @@ public class CardGame {
         // init the 2n decks, first n for players, final n for decks
         // player decks numbered 0..n, decks also numbered 0..n
         for (int i = 0; i < 2*n; i++) {
-            individualDecks.add(new CardDeck(i%n));
+            individualDecks.add(new CardDeck( 1 + i%n));
         }
 
         // populates 2n decks by placing the card on the bottom and popping the card from the pack,
@@ -85,7 +85,7 @@ public class CardGame {
             CardDeck leftDeck = individualDecks.get(n + i);
             CardDeck rightDeck = individualDecks.get(n + (i+1)%n);
             this.players.add(
-                // playersDeck already has a deckNuber - this is the players number
+                // playersDeck already has a deckNumber - this is the players number
                 new Player(
                     playersDeck,
                     leftDeck,
