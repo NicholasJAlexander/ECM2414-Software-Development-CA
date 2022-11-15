@@ -111,8 +111,8 @@ public class Player extends CardDeck implements Runnable{
 
     public static synchronized void playGo(Player p) {
 
-        // skip go if players left deck is empyt
-        if (p.cards.size() == 0) {return;}
+        // skip go if players left deck is empty
+        if (p.leftDeck.cards.size() == 0) {return;}
         System.out.println("\n");
         // draws card from left deck and add to back of players deck
         p.drawCardFromDeck();
