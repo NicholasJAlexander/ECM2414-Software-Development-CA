@@ -10,6 +10,10 @@ import java.io.IOException;
 
 public class Player extends CardDeck implements Runnable{
 
+    static ArrayList<Player> players = new ArrayList<>();
+
+    static Player winner = null;
+
     int playerNumber;
     CardDeck leftDeck;
     CardDeck rightDeck;
@@ -21,7 +25,7 @@ public class Player extends CardDeck implements Runnable{
         super(d);
 //        this.d = d;
         this.initialDeckSize = d.size();
-        this.playerNumber = this.deckNumber + 1;
+        this.playerNumber = this.deckNumber;
         this.leftDeck = lDeck;
         this.rightDeck = rDeck;
         this.saveLocation = "Logs" + File.separator + "player" + this.playerNumber + "_output.txt";
@@ -46,6 +50,9 @@ public class Player extends CardDeck implements Runnable{
         String initialMsg = String.format("player %d initial hand %s", this.playerNumber, this.getOrderedHand());
         this.logOutput(initialMsg);
 
+        //add player to list of players
+        Player.players.add(this);
+
     }
 
     static boolean allSameCards(Queue<Card> cs) {
@@ -59,10 +66,6 @@ public class Player extends CardDeck implements Runnable{
             }
         }
         return true;
-    };
-
-    void writeFile() {
-
     }
 
     void drawCardFromDeck() {
@@ -70,29 +73,29 @@ public class Player extends CardDeck implements Runnable{
         // print drawn card info
         Card c = this.leftDeck.takeCardFromTop();
         if (c == null) {
-            // theres no cards in the left deck
+            // there is no cards in the left deck
             return;
         }
-        String drawsMsg = String.format("player %d draws a %d from deck %d", this.playerNumber, c.getValue(), this.rightDeck.deckNumber);
+        String drawsMsg = String.format("player %d draws a %d from deck %d", this.playerNumber, c.getValue(), this.leftDeck.deckNumber);
         logOutput(drawsMsg);
         this.cards.add(c);
     }
 
     void discardCardToDeck(Player p) {
-        // cycles players cards to avoid dicarding a prefered card
+        // cycles players cards to avoid discarding a preferred card
         while (p.cards.peek().getValue() == p.playerNumber) {
             // removes card from top and places on bottom of deck, this only happens if
-            // the card value is the preffered value
+            // the card value is the preferred value
             p.cards.add(p.cards.poll());
         }
 
-        // discards a non prefered card
+        // discards a non preferred card
         Card discard = p.cards.poll();
 //        p.discardCard(discard);
 
         // print discard info
         this.rightDeck.placeCardOnBottom(discard);
-        String discardMsg = String.format("player %d discards a %d from deck %d", this.playerNumber, discard.getValue(), this.leftDeck.deckNumber);
+        String discardMsg = String.format("player %d discards a %d to deck %d", this.playerNumber, discard.getValue(), this.rightDeck.deckNumber);
         logOutput(discardMsg);
     }
 
@@ -113,6 +116,9 @@ public class Player extends CardDeck implements Runnable{
 
         // skip go if players left deck is empty
         if (p.leftDeck.cards.size() == 0) {return;}
+        if (winner != null) {return;}
+
+
         System.out.println("\n");
         // draws card from left deck and add to back of players deck
         p.drawCardFromDeck();
@@ -129,19 +135,24 @@ public class Player extends CardDeck implements Runnable{
         if (p.playerWon && p.initialDeckSize == p.cards.size()) {
             // player wins here
             String pN = String.format("player " + p.playerNumber);
-            String msg = "Player " + p.playerNumber + " wins\n" + pN + " exits\n" + pN + String.format(" final hand is %s",p.getOrderedHand());
+            String msg = pN + " wins\n" + pN + " exits\n" + pN + String.format(" final hand is %s\n",p.getOrderedHand());
             p.logOutput(msg);
+            winner = p;
         }
     }
 
-    ArrayList<Integer> getOrderedHand() {
-        // orderes hand
-        ArrayList<Integer> arr = new ArrayList<Integer>();
+    String getOrderedHand() {
+        // orders hand
+        ArrayList<Integer> arr = new ArrayList<>();
         for (Card c: this.cards) {
             arr.add(c.getValue());
         }
         Collections.sort(arr);
-        return arr;
+        String hand = "";
+        for (Integer i: arr) {
+            hand += " " + i;
+        }
+        return hand;
     }
 
     @Override
@@ -153,12 +164,22 @@ public class Player extends CardDeck implements Runnable{
                 "\n";
     }
 
+    String loseMessage() {
+        String loseMsg = "player " + winner.playerNumber + " has informed player " + this.playerNumber +
+                         " that player " + winner.playerNumber + " has won\n" +
+                         "player " + this.playerNumber + " exits\n" +
+                         "player " + this.playerNumber + String.format(" hand is %s\n",this.getOrderedHand());
+        return loseMsg;
+    }
 
     @Override
     public void run() {
         // thread
-        while (!this.playerWon) {
+        while (winner == null) {
             playGo(this);
+        }
+        if (winner != this) {
+            this.logOutput(this.loseMessage());
         }
     }
 }
