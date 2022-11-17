@@ -13,6 +13,7 @@ public class CardGame {
     ArrayList<Player> players;
     ArrayList<CardDeck> decks;
 
+
     CardGame(int n, String file) throws IOException {
         p = new Pack(n, file);
 
@@ -45,15 +46,6 @@ public class CardGame {
 
         // players
         // decks 
-    }
-
-    boolean checkWin() {
-        for (Player ip: players) {
-            if (ip.playerWon) {
-                return true;
-            }
-        }
-        return false;
     }
 
     void dealCards(int n, Pack p) {
@@ -98,16 +90,6 @@ public class CardGame {
             // adds deck to games deck list
             this.decks.add(leftDeck);
         }
-
-
-
-        /*
-            Pack values: [1, 1, 2, 2]
-            Pack values: [1, 1, 2, 2]
-            Pack values: [1, 1, 2, 2]
-            Pack values: [1, 1, 2, 2]
-         */
-
 
         // deal cards each player
 

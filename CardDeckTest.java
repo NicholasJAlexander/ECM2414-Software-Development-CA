@@ -21,7 +21,20 @@ class CardDeckTest {
     }
 
     @Test
-    void takeCardFromTop() {
+    void size() {
+        CardDeck testDeck = initDeck();
+        assertEquals(4, testDeck.size());
+    }
+
+    @Test
+    void testToString() {
+        CardDeck testDeck = initDeck();
+
+        assertEquals(String.valueOf(testDeck), "[1, 2, 3, 4]");
+    }
+
+    @Test
+    void testTakeCardFromTop() {
         CardDeck testDeck = initDeck();
 
         String valueBefore = String.valueOf(testDeck);
@@ -36,7 +49,7 @@ class CardDeckTest {
     }
 
     @Test
-    void placeCardOnBottom() {
+    void testPlaceCardOnBottom() {
         CardDeck testDeck = initDeck();
 
         String valueBefore = String.valueOf(testDeck);
@@ -51,26 +64,33 @@ class CardDeckTest {
     }
 
     @Test
-    void size() {
-        CardDeck testDeck = initDeck();
-        assertEquals(4, testDeck.size());
+    void testSize() {
     }
 
     @Test
-    void testToString() {
-        CardDeck testDeck = initDeck();
-
-        assertEquals(String.valueOf(testDeck), "[1, 2, 3, 4]");
+    void getCards() {
     }
 
     @Test
-    void takeAndPlace() {
-        CardDeck testDeck1 = initDeck();
-        CardDeck testDeck2 = initDeck();
-
-        Card c = CardDeck.takeAndPlace(testDeck1, testDeck2, new Card(1));
-
-        assertEquals(1, c.getValue());
-        assertNotEquals(testDeck1.getCards(), testDeck2.getCards());
+    void outputToFile() {
     }
+
+    @Test
+    void getOrderedHand() {
+    }
+
+    @Test
+    void logOutput() {
+    }
+
+//    @Test
+//    void takeAndPlace() {
+//        CardDeck testDeck1 = initDeck();
+//        CardDeck testDeck2 = initDeck();
+//
+//        Card c = CardDeck.takeAndPlace(testDeck1, testDeck2, new Card(1));
+//
+//        assertEquals(1, c.getValue());
+//        assertNotEquals(testDeck1.getCards(), testDeck2.getCards());
+//    }
 }
