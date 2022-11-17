@@ -14,8 +14,7 @@ public class CardGame {
     ArrayList<CardDeck> decks;
 
 
-    CardGame(int n, String file) throws IOException {
-        p = new Pack(n, file);
+    CardGame(int n, Pack p) throws IOException {
 
         dealCards(n, p);
 
@@ -90,9 +89,6 @@ public class CardGame {
             // adds deck to games deck list
             this.decks.add(leftDeck);
         }
-
-        // deal cards each player
-
     }
 
     public static void main(String args[]) {
@@ -105,15 +101,14 @@ public class CardGame {
             int n = 4; //Integer.parseInt(bReader.readLine());
 
             // Take input of pack file
-            System.out.println("Enter the filename of the desired pack here: ");
-            String fileName = "pack.txt"; // bReader.readLine();
-
+            Pack p = new Pack(n,bReader);
+            bReader.close();
             // Output to user
-            System.out.println("The number of players you have selected are: " + n);
-            System.out.println("The name of the file you have selected is: " + fileName);
+            //System.out.println("The number of players you have selected are: " + n);
+            //System.out.println("The name of the file you have selected is: " + fileName);
 
             // Start new card game
-            new CardGame(n, fileName);
+            new CardGame(n, p);
 
         } catch (IOException e) {
             System.out.println("Error: " + e);

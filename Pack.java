@@ -7,54 +7,80 @@ import java.util.LinkedList;
 public class Pack {
 
     // has implementation to take check if plain text file is a valid input pack
-    // reads the files values into a linked list 
-
-    // number of players
-    int nOPs;
+    // reads the files values into a linked list
+    int reqNumOfCards;
 
     LinkedList<Integer> cards;
 
 
-    public Pack(int n, String file) throws IOException {
-        try {
+    public Pack(int numberOfPlayers, BufferedReader bReader) throws IOException {
 
-            // takes number of players, and also the name of file that holds the packs numbers
-            this.cards = new LinkedList<>();
-            this.nOPs = n;
+        // takes number of players, and the name of file that holds the packs numbers
+        this.cards = new LinkedList<>();
+        // required number of cards
+        this.reqNumOfCards = 8*numberOfPlayers;
+        boolean successful;
+        String fileName;
 
-            // the required amount of cards
-            int requiredAmount = this.nOPs * 8;
+        System.out.println("Enter the filename of the desired pack here: ");
 
-            System.out.println(file);
+        do {
+            successful = true;
+            this.cards.clear();
+            fileName = bReader.readLine();
 
             // initialise file and reader
-            File userInputFile = new File(file);
-            BufferedReader bReader = new BufferedReader(new FileReader(userInputFile));
+            File userInputFile = new File(fileName);
+            if (!userInputFile.exists()) {
+                System.out.println("Your pack file does not exist, please give a valid pack file");
+                successful = false;
+                continue;
+            }
+            BufferedReader packReader = new BufferedReader(new FileReader(userInputFile));
 
-            // create current line variable
             String currentLine;
-            int i = 0;
+            boolean trailingLines = false;
 
-            // check if the end of the file has been reached
-            while ((currentLine = bReader.readLine()) != null) {
-                // check if there are too many cards in the pack
-                if (i == requiredAmount) {
-                    System.out.println("The file exceeded the amount of cards needed for the game");
-                } else {
+            while ((currentLine = packReader.readLine()) != null) {
+
+                // ignores empty lines at the end of a file
+                if (currentLine == "") {
+                    trailingLines = true;
+                    continue;
+                } else if (trailingLines) {
+                    System.out.println("Your pack file is invalid, please give a valid pack file");
+                    // causes a skip to next loop
+                    successful = false;
+                    break;
+                }
+
+                try {
                     // add the integer to the list
                     this.cards.add(Integer.parseInt(currentLine));
+                } catch (NumberFormatException e) {
+                    System.out.println("Your pack file is invalid, please give a valid pack file");
+                    // causes a skip to next loop
+                    successful = false;
+                    break;
                 }
-                i++;
             }
 
-            if (i < requiredAmount) {
-                System.out.println("The file didn't contain enough cards");
+            if (!successful) {
+                // try again
+                continue;
             }
 
-            bReader.close();
-        } catch (NumberFormatException e) {
-            System.out.println("Error: " + e);
-        }
+            if (this.cards.size() != this.reqNumOfCards) {
+                String msg = String.format(
+                        "Your pack file is invalid, it has %d cards, but should have %d cards. " +
+                                "Please give a valid pack file.",
+                        this.cards.size(),
+                        this.reqNumOfCards);
+                System.out.println(msg);
+                successful = false;
+            }
+
+        } while (!successful);
     }
 
     // getter

@@ -2,9 +2,7 @@ package ContinuousAssessment;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -33,8 +31,10 @@ class PackTest {
         }
 
         bWriter.close();
+        BufferedReader bReader = new BufferedReader(new FileReader(saveLocation));
 
-        testPack = new Pack(4, "testPack.txt");
+        testPack = new Pack(4, bReader);
+        bReader.close();
     }
 
     @Test
