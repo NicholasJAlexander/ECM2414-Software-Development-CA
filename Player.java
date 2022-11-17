@@ -7,12 +7,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Player extends CardDeck implements Runnable{
 
-    static ArrayList<Player> players = new ArrayList<>();
-
-    static Player winner = null;
+    static AtomicInteger winner = new AtomicInteger();
 
     int playerNumber;
     CardDeck leftDeck;
@@ -23,7 +22,6 @@ public class Player extends CardDeck implements Runnable{
 
     Player(CardDeck d, CardDeck lDeck, CardDeck rDeck) {
         super(d);
-//        this.d = d;
         this.initialDeckSize = d.size();
         this.playerNumber = this.deckNumber;
         this.leftDeck = lDeck;
@@ -31,6 +29,7 @@ public class Player extends CardDeck implements Runnable{
         this.saveLocation = "Logs" + File.separator + "player" + this.playerNumber + "_output.txt";
         this.playerWon = allSameCards(this.cards);
 
+        String initialMsg = String.format("player %d initial hand %s", this.playerNumber, this.getOrderedHand());
         // initialise logs folder and file
         try {
             // create file variable
@@ -38,21 +37,14 @@ public class Player extends CardDeck implements Runnable{
             logFile.getParentFile().mkdirs();
             if (!logFile.createNewFile()) {
                 BufferedWriter bWriter = new BufferedWriter(new FileWriter(this.saveLocation));
-                System.out.println("save location: " + this.saveLocation);
+                //System.out.println("save location: " + this.saveLocation);
                 // initialise file
-                bWriter.write("Player " + this.playerNumber + " created.");
+                bWriter.write(initialMsg);
                 bWriter.close();
             }
         } catch (IOException e) {
             System.out.printf("An output file for player" + this.playerNumber + " has not been created.");
         }
-        // outputs initial message
-        String initialMsg = String.format("player %d initial hand %s", this.playerNumber, this.getOrderedHand());
-        this.logOutput(initialMsg);
-
-        //add player to list of players
-        Player.players.add(this);
-
     }
 
     static boolean allSameCards(Queue<Card> cs) {
@@ -81,16 +73,16 @@ public class Player extends CardDeck implements Runnable{
         this.cards.add(c);
     }
 
-    void discardCardToDeck(Player p) {
+    void discardCardToDeck() {
         // cycles players cards to avoid discarding a preferred card
-        while (p.cards.peek().getValue() == p.playerNumber) {
+        while (this.cards.peek().getValue() == this.playerNumber) {
             // removes card from top and places on bottom of deck, this only happens if
             // the card value is the preferred value
-            p.cards.add(p.cards.poll());
+            this.cards.add(this.cards.poll());
         }
 
         // discards a non preferred card
-        Card discard = p.cards.poll();
+        Card discard = this.cards.poll();
 //        p.discardCard(discard);
 
         // print discard info
@@ -99,11 +91,11 @@ public class Player extends CardDeck implements Runnable{
         logOutput(discardMsg);
     }
 
-    private void logOutput(String msg) {
+    void logOutput(String msg) {
         try {
             BufferedWriter bWriter = new BufferedWriter(new FileWriter(this.saveLocation, true));
             bWriter.newLine();
-            System.out.println("output: " + msg);
+            //System.out.println("output: " + msg);
             bWriter.write(msg);
             bWriter.close();
         } catch (IOException e) {
@@ -111,49 +103,42 @@ public class Player extends CardDeck implements Runnable{
         }
     }
 
+    public boolean playGo() {
 
-    public static synchronized void playGo(Player p) {
+        // checks if there is a winner
+        if (winner.intValue()!=0) {
+            return false;
+        }
 
         // skip go if players left deck is empty
-        if (p.leftDeck.cards.size() == 0) {return;}
-        if (winner != null) {return;}
+        if (this.leftDeck.cards.size() == 0) {return true;}
 
-
-        System.out.println("\n");
+        //System.out.println("\n");
         // draws card from left deck and add to back of players deck
-        p.drawCardFromDeck();
+        this.drawCardFromDeck();
         
         //discards non preferred card, places on right deck
-        p.discardCardToDeck(p);
+        this.discardCardToDeck();
 
-        String currentHandMsg = String.format("player %d current hand is %s",p.playerNumber,p.getOrderedHand());
-        p.logOutput(currentHandMsg);
-        
-        // check if player has won
-        p.playerWon = allSameCards(p.cards);
+        // outputs current had to file
+        this.currentHandOutput();
 
-        if (p.playerWon && p.initialDeckSize == p.cards.size()) {
-            // player wins here
-            String pN = String.format("player " + p.playerNumber);
-            String msg = pN + " wins\n" + pN + " exits\n" + pN + String.format(" final hand is %s\n",p.getOrderedHand());
-            p.logOutput(msg);
-            winner = p;
+        // sets playerWon attribute according to whether the player as won
+        this.setPlayerWon();
+
+        if (this.playerWon) {
+            // if this player first to win, not the case if winner != 0
+            if (winner.intValue() == 0) {
+                // output win to file
+                this.winOutput();
+                // set winner
+                winner.set(this.playerNumber);
+            }
         }
+        // this return value is used to stop the thread if player wins (makes a players go atomic)
+        return !this.playerWon;
     }
 
-    String getOrderedHand() {
-        // orders hand
-        ArrayList<Integer> arr = new ArrayList<>();
-        for (Card c: this.cards) {
-            arr.add(c.getValue());
-        }
-        Collections.sort(arr);
-        String hand = "";
-        for (Integer i: arr) {
-            hand += " " + i;
-        }
-        return hand;
-    }
 
     @Override
     public String toString() {
@@ -164,22 +149,43 @@ public class Player extends CardDeck implements Runnable{
                 "\n";
     }
 
-    String loseMessage() {
-        String loseMsg = "player " + winner.playerNumber + " has informed player " + this.playerNumber +
-                         " that player " + winner.playerNumber + " has won\n" +
-                         "player " + this.playerNumber + " exits\n" +
-                         "player " + this.playerNumber + String.format(" hand is %s\n",this.getOrderedHand());
-        return loseMsg;
+    void loseOutput() {
+        int winnerNumber = winner.intValue();
+        String pN = String.format("player " + this.playerNumber);
+        String msg = "player " + winnerNumber + " has informed " + pN +
+                     " that player " + winnerNumber + " has won\n" +
+                     pN + " exits\n" +
+                     pN + String.format(" hand: %s",this.getOrderedHand());
+        this.logOutput(msg);
+    }
+
+    void winOutput() {
+        String pN = String.format("player " + this.playerNumber);
+        String msg = pN + " wins\n" + pN + " exits\n" + pN + String.format(" final hand is %s", this.getOrderedHand());
+        this.logOutput(msg);
+    }
+
+    void currentHandOutput() {
+        String msg = String.format("player %d current hand is %s",this.playerNumber,this.getOrderedHand());
+        this.logOutput(msg);
+    }
+
+    void setPlayerWon() {
+        this.playerWon = allSameCards(this.cards);
     }
 
     @Override
     public void run() {
-        // thread
-        while (winner == null) {
-            playGo(this);
-        }
-        if (winner != this) {
-            this.logOutput(this.loseMessage());
+        // playGo returns false if player had won
+        while (this.playGo());
+
+        // outputs deck contents to file
+        this.leftDeck.outputToFile();
+
+        if (winner.intValue() == this.playerNumber) {
+            System.out.println(String.format("player %d wins",this.playerNumber));
+        } else {
+            this.loseOutput();
         }
     }
 }

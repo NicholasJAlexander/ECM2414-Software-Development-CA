@@ -4,10 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
-import static ContinuousAssessment.Player.playGo;
+
 
 public class CardGame {
 
@@ -29,15 +27,19 @@ public class CardGame {
             System.out.println(individualDeck);
         }
 
-        for (Player ip: players) {
-            Thread thread = new Thread(ip);
-            thread.start();
-        }
-
+        // this needs to go before starting the threads, otherwise players will start playing,
+        // even if a player initially wins
         for (Player ip: players) {
             if (ip.playerWon) {
                 System.out.println("Player: " + ip.playerNumber + " has won");
+                Player.winner.set(ip.playerNumber);
+                ip.winOutput();
             }
+        }
+
+        for (Player ip: players) {
+            Thread thread = new Thread(ip);
+            thread.start();
         }
 
 
@@ -65,10 +67,11 @@ public class CardGame {
         decks = new ArrayList<>();
 
         // init the 2n decks, first n for players, final n for decks
-        // player decks numbered 0..n, decks also numbered 0..n
+        // player decks numbered 1..n, decks also numbered 1..n
         for (int i = 0; i < 2*n; i++) {
             individualDecks.add(new CardDeck( 1 + i%n));
         }
+
 
         // populates 2n decks by placing the card on the bottom and popping the card from the pack,
         // first n decks are for the players (dealt to first), last n decks are for the decks between players
@@ -134,6 +137,4 @@ public class CardGame {
             System.out.println("Error: " + e);
         }
     }
-
-    
 }

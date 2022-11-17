@@ -65,7 +65,7 @@ class PlayerTest {
 
         String valueBefore = String.valueOf(p);
 
-        p.discardCardToDeck(p);
+        p.discardCardToDeck();
 
         String expectedOutput = "\n" +
                 "Player number  : 2\n" +
@@ -90,7 +90,7 @@ class PlayerTest {
 
         String valueBefore = String.valueOf(p);
 
-        Player.playGo(p);
+        p.playGo();
 
         String expectedOutput = "\nPlayer number  : 2\n" +
                 "Player deck    : [1, 2, 3, 4]\n" +
