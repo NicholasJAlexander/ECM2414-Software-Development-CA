@@ -17,6 +17,9 @@ public class Player extends CardDeck implements Runnable{
     CardDeck leftDeck;
     CardDeck rightDeck;
     String saveLocation;
+
+    public Boolean getPlayerWon() { return playerWon; }
+
     Boolean playerWon;
     int initialDeckSize;
 
@@ -169,6 +172,7 @@ public class Player extends CardDeck implements Runnable{
         String msg = String.format("player %d current hand is %s",this.playerNumber,this.getOrderedHand());
         this.logOutput(msg);
     }
+
 
     void setPlayerWon() {
         this.playerWon = allSameCards(this.cards);
