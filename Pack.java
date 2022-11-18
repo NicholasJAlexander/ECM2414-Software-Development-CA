@@ -11,7 +11,7 @@ public class Pack extends CardDeck {
     // reads the files values into a linked list
     private int reqNumOfCards;
 
-    public Pack(int numberOfPlayers, BufferedReader bReader) throws IOException {
+    public Pack(int numberOfPlayers, BufferedReader bReader, String testFile) throws IOException {
         // takes number of players, and the name of file that holds the packs numbers
 
         // required number of cards
@@ -30,8 +30,7 @@ public class Pack extends CardDeck {
             // clear the cards list - might contain cards from previous loop
             this.cards.clear();
             // read file name from the bReader
-            fileName = bReader.readLine();
-
+            fileName = testFile == "" ? bReader.readLine() : testFile;
             // initialise file and reader
             File userInputFile = new File(fileName);
             if (!userInputFile.exists()) {

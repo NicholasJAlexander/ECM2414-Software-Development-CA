@@ -45,6 +45,7 @@ public class CardGame {
         }
     }
 
+
     void dealCards(int n, Pack pack) {
         // deals out the cards in pack, pack should have 8n cards in it
 
@@ -97,7 +98,7 @@ public class CardGame {
             int n = 4; //Integer.parseInt(bReader.readLine());
 
             // Take input of pack file
-            Pack p = new Pack(n,bReader);
+            Pack p = new Pack(n,bReader, "");
             bReader.close();
             // Output to user
             //System.out.println("The number of players you have selected are: " + n);
@@ -110,4 +111,5 @@ public class CardGame {
             System.out.println("Error: " + e);
         }
     }
+
 }
