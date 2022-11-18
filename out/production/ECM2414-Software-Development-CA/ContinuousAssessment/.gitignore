@@ -26,3 +26,5 @@ ECM2414-Software-Development-CA.iml
 ECM2414-Software-Development-CA.iml
 Logs/player4_output.txt
 out/production/ECM2414-Software-Development-CA/ContinuousAssessment/Logs/player2_output.txt
+*.txt
+*.txt

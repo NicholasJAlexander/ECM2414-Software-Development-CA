@@ -14,6 +14,7 @@ public class Player extends CardDeck implements Runnable{
     // this is used to allow players to check if another player has won
     // it is the player number of the winning player
     static AtomicInteger winner = new AtomicInteger();
+
     // the player's number
     private int playerNumber;
     // deck to the left of player, player draws from this deck
@@ -24,6 +25,7 @@ public class Player extends CardDeck implements Runnable{
     private boolean playerWon;
     // queue is implemented to avoid the game stagnating
     private Queue<Card> cards;
+
 
     Player(CardDeck d, CardDeck lDeck, CardDeck rDeck) {
         this.cards = d.cards;
