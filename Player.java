@@ -14,7 +14,6 @@ public class Player extends CardDeck implements Runnable{
     // this is used to allow players to check if another player has won
     // it is the player number of the winning player
     static AtomicInteger winner = new AtomicInteger();
-
     // the player's number
     private int playerNumber;
     // deck to the left of player, player draws from this deck
@@ -139,11 +138,11 @@ public class Player extends CardDeck implements Runnable{
         // checks if player has won
         if (this.playerWon) {
             // checks if the player is first to win, winner = 0 if no one has won yet
-            if (winner.intValue() == 0) {
+            // sets winner to playerNumber if winner = 0
+            winner.compareAndSet(0,this.playerNumber);
+            if (winner.intValue() == this.playerNumber) {
                 // output win to file
                 this.winOutput();
-                // set winner - used to communicate to other players
-                winner.set(this.playerNumber);
             }
         }
         // this return value is used to stop the thread if player wins
