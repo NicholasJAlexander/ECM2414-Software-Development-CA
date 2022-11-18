@@ -2,8 +2,6 @@ package ContinuousAssessment;
 
 import org.junit.jupiter.api.DisplayName;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -14,16 +12,30 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class PlayerTest {
 
+    Queue<Card> tempCards = new LinkedList<>();
+
+    Player createPlayer() {
+        CardDeck playerDeck = new CardDeck(1);
+        CardDeck lDeck = new CardDeck(2);
+        CardDeck rDeck = new CardDeck(3);
+        for (Card c: this.tempCards) {
+            playerDeck.placeCardOnBottom(c);
+            lDeck.placeCardOnBottom(c);
+            rDeck.placeCardOnBottom(c);
+        }
+        return new Player(playerDeck, lDeck, rDeck);
+    }
+
     @DisplayName("Check if all of the cards are the same")
     @org.junit.jupiter.api.Test
     void allSameCards() {
 
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 0; i < 4; i++) {tempSet.add(new Card(1));}
+        this.tempCards.clear();
+        for (int i = 0; i < 4; i++) {this.tempCards.add(new Card(1));}
 
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
+        Player p = createPlayer();
 
-        assertEquals(true, Player.allSameCards(p.cards));
+        assertTrue(p.getPlayerWon());
     }
 
     @org.junit.jupiter.api.Test
@@ -33,12 +45,11 @@ class PlayerTest {
 
     @org.junit.jupiter.api.Test
     void drawCardFromDeck() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {this.tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
-
+        Player p = createPlayer();
         String valueBefore = String.valueOf(p);
 
         p.drawCardFromDeck();
@@ -57,12 +68,11 @@ class PlayerTest {
 
     @org.junit.jupiter.api.Test
     void discardCardToDeck() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {this.tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
-
+        Player p = createPlayer();
         String valueBefore = String.valueOf(p);
 
         p.discardCardToDeck();
@@ -82,11 +92,11 @@ class PlayerTest {
 
     @org.junit.jupiter.api.Test
     void playGo() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {this.tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
+        Player p = createPlayer();
 
         String valueBefore = String.valueOf(p);
 
@@ -105,22 +115,21 @@ class PlayerTest {
     @DisplayName("Check sorted deck value")
     @org.junit.jupiter.api.Test
     void getOrderedHand() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {this.tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
+        Player p = createPlayer();
 
-        assertEquals(p.getOrderedHand(), Arrays.asList(1,2,3,4));
+        assertEquals(p.getOrderedCards(), "1 2 3 4 ");
     }
 
     @org.junit.jupiter.api.Test
     void testToString() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(1));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {this.tempCards.add(new Card(1));}
 
-
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
+        Player p = createPlayer();
 
         String expectedOutput = "\nPlayer number  : 2\nPlayer deck    : [1, 1, 1, 1]\nDeck no 2 ldeck: [1, 1, 1, 1]\nDeck no 3 rdeck: [1, 1, 1, 1]\n";
         String actualOutput = String.valueOf(p);

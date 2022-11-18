@@ -3,61 +3,72 @@ package ContinuousAssessment;
 import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Queue;
 
-public class Pack {
+public class Pack extends CardDeck {
 
     // has implementation to take check if plain text file is a valid input pack
     // reads the files values into a linked list
-    int reqNumOfCards;
-
-    LinkedList<Integer> cards;
-
+    private int reqNumOfCards;
 
     public Pack(int numberOfPlayers, BufferedReader bReader) throws IOException {
-
         // takes number of players, and the name of file that holds the packs numbers
-        this.cards = new LinkedList<>();
+
         // required number of cards
         this.reqNumOfCards = 8*numberOfPlayers;
+        // this is used to check if parsing of pack file has been successful, if value is true when checked,
+        // the parsing has been successful (up to the point of checking)
         boolean successful;
+        // name of the pack file
         String fileName;
 
         System.out.println("Enter the filename of the desired pack here: ");
 
         do {
+            // assume the parsing is successful
             successful = true;
+            // clear the cards list - might contain cards from previous loop
             this.cards.clear();
+            // read file name from the bReader
             fileName = bReader.readLine();
 
             // initialise file and reader
             File userInputFile = new File(fileName);
             if (!userInputFile.exists()) {
                 System.out.println("Your pack file does not exist, please give a valid pack file");
+                // parsing has failed - skip to next loop
                 successful = false;
                 continue;
             }
+            // init BufferReader (file definitely exists at this point)
             BufferedReader packReader = new BufferedReader(new FileReader(userInputFile));
 
             String currentLine;
-            boolean trailingLines = false;
+            // this is used to avoid invalidating a valid pack file that has empty lines at the end of the file
+            boolean trailingEmptyLines = false;
 
             while ((currentLine = packReader.readLine()) != null) {
 
-                // ignores empty lines at the end of a file
                 if (currentLine == "") {
-                    trailingLines = true;
+                    trailingEmptyLines = true;
+                    // go to next loop
                     continue;
-                } else if (trailingLines) {
+                } else if (trailingEmptyLines) {
+                    // if currentline != "", and trailingEmptyLines is true, then the pack file
+                    // has an empty line in the middle of it, and is invalid
                     System.out.println("Your pack file is invalid, please give a valid pack file");
-                    // causes a skip to next loop
+                    // successful is checked after this while loop, to check if the pack is invalid
                     successful = false;
+                    // breaks out of current while loop because the pack is invalid
                     break;
                 }
 
                 try {
                     // add the integer to the list
-                    this.cards.add(Integer.parseInt(currentLine));
+                    // if currentLine can't be an int, a NumberFormatException is thrown
+                    this.cards.add(new Card(Integer.parseInt(currentLine)));
                 } catch (NumberFormatException e) {
+                    // NumberFormatException is caught the pack is invalid
                     System.out.println("Your pack file is invalid, please give a valid pack file");
                     // causes a skip to next loop
                     successful = false;
@@ -83,24 +94,12 @@ public class Pack {
         } while (!successful);
     }
 
-    // getter
-    public LinkedList<Integer> getCards() {
-        return cards;
-    }
-
-    // pops the card from the list
-    public Card popCard() {
-        return new Card(this.cards.pop());
-    }
-
-//    void readFile() throws IOException {
-//        // reads .txt file into a deck
-//    }
-
     @Override
     public String toString(){
-        return "Pack values: " + Arrays.toString(cards.toArray());
+        String cardsStr = "";
+        for (Card c: this.cards) {
+            cardsStr += c.getValue()+" ";
+        }
+        return "Pack card values: " + cardsStr;
     }
-
-
 }

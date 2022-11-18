@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,29 +34,6 @@ class PackTest {
 
         testPack = new Pack(4, bReader);
         bReader.close();
-    }
-
-    @Test
-    void getCards() throws IOException {
-        initFile();
-
-        assertEquals(testPack.getCards(), temp);
-
-    }
-
-    @Test
-    void popCard() throws IOException {
-        initFile();
-
-        LinkedList<Integer> beforePop = testPack.getCards();
-
-        Card val = testPack.popCard();
-
-        LinkedList<Integer> afterPop = testPack.getCards();
-
-        assertEquals(val.getValue(), new Card(temp.get(0)).getValue());
-        assertEquals(beforePop, afterPop);
-
     }
 
     @Test
