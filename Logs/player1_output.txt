@@ -1,4 +1,1 @@
 player 1 initial hand 1 2 3 4 
-player 1 draws a 4 from deck 2
-player 1 discards a 3 to deck 3
-player 1 current hand is 1 2 3 4 
