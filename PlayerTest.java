@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerTest {
 
 
-    Queue<Card> tempCards = new LinkedList<>();
+    private Queue<Card> tempCards = new LinkedList<>();
 
     Player createPlayer() {
         CardDeck playerDeck = new CardDeck(1);
@@ -30,6 +30,19 @@ class PlayerTest {
         }
         return new Player(playerDeck, lDeck, rDeck);
     }
+
+    Player createPlayerForLogging() {
+        CardDeck playerDeck = new CardDeck(-1);
+        CardDeck lDeck = new CardDeck(-1);
+        CardDeck rDeck = new CardDeck(-1);
+        for (Card c: this.tempCards) {
+            playerDeck.placeCardOnBottom(c);
+            lDeck.placeCardOnBottom(c);
+            rDeck.placeCardOnBottom(c);
+        }
+        return new Player(playerDeck, lDeck, rDeck);
+    }
+
 
     @org.junit.jupiter.api.Test
     void drawCardFromDeck() {
@@ -107,7 +120,7 @@ class PlayerTest {
 
         Player p = createPlayer();
 
-        String expectedOutput = "\nPlayer number  : 1\nPlayer deck    : 1 1 1 1 \nDeck no 2 ldeck: [1, 1, 1, 1]\nDeck no 3 rdeck: [1, 1, 1, 1]\n";
+        String expectedOutput = "\nPlayer number  : 1\nPlayer deck    : 1 1 1 1 \nDeck no 2 ldeck: 1, 1, 1, 1 \nDeck no 3 rdeck: 1, 1, 1, 1 \n";
         String actualOutput = String.valueOf(p);
 
         assertEquals(actualOutput, expectedOutput);
@@ -115,21 +128,21 @@ class PlayerTest {
 
     @Test
     void testAllSameCards() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 0; i < 4; i++) {tempSet.add(new Card(1));}
+        this.tempCards.clear();
+        for (int i = 0; i < 4; i++) {tempCards.add(new Card(1));}
 
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
+        Player p = createPlayer();;
 
         assertEquals(true, p.getPlayerWon());
     }
 
     @Test
     void testDrawCardFromDeck() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
+        Player p = createPlayer();
 
         String valueBefore = String.valueOf(p);
 
@@ -149,11 +162,10 @@ class PlayerTest {
 
     @Test
     void testDiscardCardToDeck() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {tempCards.add(new Card(i));}
 
-
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
+        Player p = createPlayer();
 
         String valueBefore = String.valueOf(p);
 
@@ -173,11 +185,10 @@ class PlayerTest {
 
     @Test
     void logOutput() throws IOException {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {tempCards.add(new Card(i));}
 
-
-        Player p = new Player(new CardDeck(tempSet, -1), new CardDeck(tempSet, -1), new CardDeck(tempSet, -1));
+        Player p = createPlayerForLogging();
 
         p.drawCardFromDeck();
 
@@ -190,11 +201,11 @@ class PlayerTest {
 
     @Test
     void testPlayGo() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, 1), new CardDeck(tempSet, 2), new CardDeck(tempSet, 3));
+        Player p = createPlayer();
 
         String valueBefore = String.valueOf(p);
 
@@ -213,11 +224,11 @@ class PlayerTest {
 
     @Test
     void loseOutput() throws IOException {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, -1), new CardDeck(tempSet, -1), new CardDeck(tempSet, -1));
+        Player p = createPlayerForLogging();
 
         p.loseOutput();
 
@@ -230,11 +241,11 @@ class PlayerTest {
 
     @Test
     void winOutput() throws IOException {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, -1), new CardDeck(tempSet, -1), new CardDeck(tempSet, -1));
+        Player p = createPlayerForLogging();
 
         p.winOutput();
 
@@ -246,27 +257,29 @@ class PlayerTest {
 
     @Test
     void currentHandOutput() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        this.tempCards.clear();
+        for (int i = 4; i > 0; i--) {tempCards.add(new Card(i));}
 
 
-        Player p = new Player(new CardDeck(tempSet, -1), new CardDeck(tempSet, -1), new CardDeck(tempSet, -1));
+        Player p = createPlayerForLogging();
 
 
-        assertEquals("1 2 3 4 ", p.getOrderedHand());
+        assertEquals("1 2 3 4 ", p.getOrderedCards());
     }
 
     @Test
     void setPlayerWon() {
-        Queue<Card> tempSet = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(i));}
+        CardDeck playerDeck = new CardDeck(-1);
+        for (int i = 4; i > 0; i--) {playerDeck.placeCardOnBottom(new Card(i));}
 
-        Queue<Card> tempAdjacentDeck1 = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(1));}
-        Queue<Card> tempAdjacentDeck2 = new LinkedList<>();
-        for (int i = 4; i > 0; i--) {tempSet.add(new Card(1));}
+        CardDeck tempAdjacentDeck1 = new CardDeck(0);
+        for (int i = 4; i > 0; i--) {tempAdjacentDeck1.placeCardOnBottom(new Card(1));}
+        CardDeck tempAdjacentDeck2 = new CardDeck(1);
+        for (int i = 4; i > 0; i--) {tempAdjacentDeck2.placeCardOnBottom(new Card(1));}
 
-        Player p = new Player(new CardDeck(tempSet, -1), new CardDeck(tempAdjacentDeck1, 0), new CardDeck(tempAdjacentDeck2, 1));
+        Player p = new Player(playerDeck,tempAdjacentDeck1,tempAdjacentDeck2);
+
+        //Player p = new Player(new CardDeck(tempSet, -1), new CardDeck(tempAdjacentDeck1, 0), new CardDeck(tempAdjacentDeck2, 1));
         for (int i = 0; i < 3; i++) {
             p.discardCardToDeck();
             p.drawCardFromDeck();
