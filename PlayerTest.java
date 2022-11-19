@@ -1,7 +1,6 @@
 package ContinuousAssessment;
 
 import jdk.jfr.Description;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
@@ -38,7 +37,7 @@ class PlayerTest {
 
     @Test
     @Description("Test to check the drawCardFromDeck method works")
-    void drawCardFromDeck() {
+    void testDrawCardFromDeck() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -55,10 +54,13 @@ class PlayerTest {
         p.drawCardFromDeck();
 
         // Define expected output
-        String expectedOutput = "\nPlayer number  : 1\n" +
-                "Player deck    : 1 2 3 4 4 \n" +
-                "Deck no 2 ldeck: 3 2 1 \n" +
-                "Deck no 3 rdeck: 4 3 2 1 \n";
+        String expectedOutput = """
+
+                Player number  : 1
+                Player deck    : 1 2 3 4 4\s
+                Deck no 2 ldeck: 3 2 1\s
+                Deck no 3 rdeck: 4 3 2 1\s
+                """;
 
         // Define actual output
         String actualOutput = String.valueOf(p);
@@ -70,7 +72,7 @@ class PlayerTest {
 
     @Test
     @Description("Test to check the cards are being discarded correctly")
-    void discardCardToDeck() {
+    void testDiscardCardToDeck() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -87,10 +89,13 @@ class PlayerTest {
         p.discardCardToDeck();
 
         // Define expected output
-        String expectedOutput = "\nPlayer number  : 1\n" +
-                "Player deck    : 1 2 3 \n" +
-                "Deck no 2 ldeck: 4 3 2 1 \n" +
-                "Deck no 3 rdeck: 4 3 2 1 4 \n";
+        String expectedOutput = """
+
+                Player number  : 1
+                Player deck    : 1 2 3\s
+                Deck no 2 ldeck: 4 3 2 1\s
+                Deck no 3 rdeck: 4 3 2 1 4\s
+                """;
 
         // Define actual output
         String actualOutput = String.valueOf(p);
@@ -103,7 +108,7 @@ class PlayerTest {
 
     @Test
     @Description("Test to simulate the playGo method")
-    void playGo() {
+    void testPlayGo() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -117,10 +122,13 @@ class PlayerTest {
         p.playGo();
 
         // Define the expected output
-        String expectedOutput = "\nPlayer number  : 1\n" +
-                "Player deck    : 1 2 3 4 \n" +
-                "Deck no 2 ldeck: 4 3 2 1 \n" +
-                "Deck no 3 rdeck: 4 3 2 1 \n";
+        String expectedOutput = """
+
+                Player number  : 1
+                Player deck    : 1 2 3 4\s
+                Deck no 2 ldeck: 4 3 2 1\s
+                Deck no 3 rdeck: 4 3 2 1\s
+                """;
 
         // Define the actual output
         String actualOutput = String.valueOf(p);
@@ -164,13 +172,13 @@ class PlayerTest {
         Player p = createPlayer();
 
         // Check the player has won
-        assertEquals(true, p.getPlayerWon());
+        assertTrue(p.getPlayerWon());
     }
 
 
     @Test
     @Description("Test to check the correct messages are being outputted to the text file")
-    void logOutput() throws IOException {
+    void testLogOutput() throws IOException {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -187,7 +195,7 @@ class PlayerTest {
         BufferedReader reader = new BufferedReader(new FileReader("Logs" + File.separator + "player1_output.txt"));
 
         // Record the first and second line of the text file
-        String value1 = reader.readLine();
+        reader.readLine();
         String value2 = reader.readLine();
 
         assertEquals("player 1 draws a 4 from deck 2", value2);
@@ -196,7 +204,7 @@ class PlayerTest {
 
     @Test
     @Description("Test to check that the correct lose output message is being saved to the text file")
-    void loseOutput() throws IOException {
+    void testLoseOutput() throws IOException {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -212,7 +220,7 @@ class PlayerTest {
         // Define the file reader
         BufferedReader reader = new BufferedReader(new FileReader("Logs" + File.separator + "player1_output.txt"));
         // Record the first and second line of the text file
-        String value1 = reader.readLine();
+        reader.readLine();
         String value2 = reader.readLine();
 
         // Assertion test
@@ -221,7 +229,7 @@ class PlayerTest {
 
     @Test
     @Description("Test to check the correct win output message is being saved in the text file")
-    void winOutput() throws IOException {
+    void testWinOutput() throws IOException {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -237,7 +245,7 @@ class PlayerTest {
         // Define the file reader
         BufferedReader reader = new BufferedReader(new FileReader("Logs" + File.separator + "player1_output.txt"));
         // Record the first and second line of the text file
-        String value1 = reader.readLine();
+        reader.readLine();
         String value2 = reader.readLine();
 
         // Assertion test
@@ -246,7 +254,7 @@ class PlayerTest {
 
     @Test
     @Description("Test to check the current hand output is correct")
-    void currentHandOutput() {
+    void testCurrentHandOutput() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -262,7 +270,7 @@ class PlayerTest {
 
     @Test
     @Description("Test to check that the playerWon method works when the deck satisfies the requirements")
-    void setPlayerWon() {
+    void testSetPlayerWon() {
         // Initialise three temporary decks
         CardDeck temp1 = new CardDeck(1);
         CardDeck temp2 = new CardDeck(2);

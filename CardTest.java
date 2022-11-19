@@ -12,7 +12,7 @@ class CardTest {
 
     @Test
     @Description("Test to check the value of the card being stored in the object")
-    void getValue() {
+    void testGetValue() {
         // Initialise a new card with a value 1
         Card c = new Card(1);
 
