@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
-
 public class CardGame {
 
     // list of player in the game
@@ -95,7 +94,7 @@ public class CardGame {
 
             // Take input of number of players
             System.out.println("Enter the number of desired players here: ");
-            int n = 4; //Integer.parseInt(bReader.readLine());
+            int n = Integer.parseInt(bReader.readLine());
 
             // Take input of pack file
             Pack p = new Pack(n,bReader, "");

@@ -14,6 +14,9 @@ player 3 current hand is 2 3 4 4
 player 3 draws a 1 from deck 3
 player 3 discards a 4 to deck 4
 player 3 current hand is 1 2 3 4 
+player 3 draws a 1 from deck 3
+player 3 discards a 2 to deck 4
+player 3 current hand is 1 1 3 4 
 player 1 has informed player 3 that player 1 has won
 player 3 exits
-player 3 hand: 1 2 3 4 
+player 3 hand: 1 1 3 4 

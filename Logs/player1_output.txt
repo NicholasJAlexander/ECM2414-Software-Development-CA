@@ -1,1 +1,19 @@
 player 1 initial hand 1 2 3 4 
+player 1 draws a 4 from deck 1
+player 1 discards a 3 to deck 2
+player 1 current hand is 1 2 4 4 
+player 1 draws a 1 from deck 1
+player 1 discards a 2 to deck 2
+player 1 current hand is 1 1 4 4 
+player 1 draws a 4 from deck 1
+player 1 discards a 4 to deck 2
+player 1 current hand is 1 1 4 4 
+player 1 draws a 1 from deck 1
+player 1 discards a 4 to deck 2
+player 1 current hand is 1 1 1 4 
+player 1 draws a 1 from deck 1
+player 1 discards a 4 to deck 2
+player 1 current hand is 1 1 1 1 
+player 1 wins
+player 1 exits
+player 1 final hand is 1 1 1 1 
