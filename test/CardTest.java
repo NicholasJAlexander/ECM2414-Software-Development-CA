@@ -1,19 +1,16 @@
 import ContinuousAssessment.Card;
-
-
 import jdk.jfr.Description;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class done using JUnit 5
  */
-class CardTest {
+public class CardTest {
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the value of the card being stored in the object")
-    void testGetValue() {
+    public void testGetValue() {
         // Initialise a new card with a value 1
         Card c = new Card(1);
 
@@ -21,9 +18,9 @@ class CardTest {
         assertEquals(1, c.getValue());
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the value of the ToString method")
-    void testToString() {
+    public void testToString() {
         // Initialise a new card with a value 1
         Card c = new Card(1);
 

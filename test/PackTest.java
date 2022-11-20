@@ -1,5 +1,4 @@
 import jdk.jfr.Description;
-import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Test class done using JUnit 5
  */
-class PackTest {
+public class PackTest {
 
     Pack testPack;
     ArrayList<Integer> temp = new ArrayList<>();
@@ -21,7 +20,7 @@ class PackTest {
      * and then initialises a new Pack object with 4 players
      * @throws IOException
      */
-    void initFile() throws IOException {
+    public void initFile() throws IOException {
         Random r = new Random();
         r.setSeed(54367853);
 
@@ -41,9 +40,9 @@ class PackTest {
         bReader.close();
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test the value of the ToString method")
-    void testToString() throws IOException {
+    public void testToString() throws IOException {
         // Initialise the pack file
         initFile();
 

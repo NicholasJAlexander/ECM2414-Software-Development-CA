@@ -1,12 +1,10 @@
 import ContinuousAssessment.Card;
-
-
 import jdk.jfr.Description;
-import org.junit.jupiter.api.Test;
 
-
-import java.io.*;
-
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test class done using JUnit 5
  */
-class PlayerTest {
+public class PlayerTest {
 
 
     Queue<Card> tempCards = new LinkedList<>();
@@ -36,9 +34,9 @@ class PlayerTest {
         return new Player(playerDeck, lDeck, rDeck);
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the drawCardFromDeck method works")
-    void testDrawCardFromDeck() {
+    public void testDrawCardFromDeck() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -71,9 +69,9 @@ class PlayerTest {
         assertNotEquals(valueBefore, actualOutput);
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the cards are being discarded correctly")
-    void testDiscardCardToDeck() {
+    public void testDiscardCardToDeck() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -107,9 +105,9 @@ class PlayerTest {
 
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to simulate the playGo method")
-    void testPlayGo() {
+    public void testPlayGo() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -138,9 +136,9 @@ class PlayerTest {
         assertEquals(expectedOutput, actualOutput);
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the ToString method is outputting the correct message")
-    void testToString() {
+    public void testToString() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -160,9 +158,9 @@ class PlayerTest {
         assertEquals(actualOutput, expectedOutput);
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the getPlayerWon method is working correctly")
-    void testAllSameCards() {
+    public void testAllSameCards() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -177,9 +175,9 @@ class PlayerTest {
     }
 
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the correct messages are being outputted to the text file")
-    void testLogOutput() throws IOException {
+    public void testLogOutput() throws IOException {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -203,9 +201,9 @@ class PlayerTest {
     }
 
 
-    @Test
+    @org.junit.Test
     @Description("Test to check that the correct lose output message is being saved to the text file")
-    void testLoseOutput() throws IOException {
+    public void testLoseOutput() throws IOException {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -228,9 +226,9 @@ class PlayerTest {
         assertEquals("player 1 has informed player 1 that player 1 has won", value2);
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the correct win output message is being saved in the text file")
-    void testWinOutput() throws IOException {
+    public void testWinOutput() throws IOException {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -253,9 +251,9 @@ class PlayerTest {
         assertEquals("player 1 wins", value2);
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check the current hand output is correct")
-    void testCurrentHandOutput() {
+    public void testCurrentHandOutput() {
         // Clear tempCards ArrayList
         this.tempCards.clear();
 
@@ -269,9 +267,9 @@ class PlayerTest {
         assertEquals("1 2 3 4 ", p.getOrderedCards());
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check that the playerWon method works when the deck satisfies the requirements")
-    void testSetPlayerWon() {
+    public void testSetPlayerWon() {
         // Initialise three temporary decks
         CardDeck temp1 = new CardDeck(1);
         CardDeck temp2 = new CardDeck(2);

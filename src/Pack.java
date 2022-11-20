@@ -22,7 +22,7 @@ public class Pack extends CardDeck {
         // name of the pack file
         String fileName;
 
-        System.out.println("Enter the filename of the desired pack here: ");
+        if (testFile == "") { System.out.println("Enter the filename of the desired pack here: "); }
 
         do {
             // assume the parsing is successful

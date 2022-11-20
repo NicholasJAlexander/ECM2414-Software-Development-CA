@@ -1,9 +1,7 @@
-import ContinuousAssessment.Card;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class done using JUnit 5
@@ -11,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  * @author James Calnan & Nicholas Alexander
  * @version 1.0
  */
-class CardDeckTest {
+public class CardDeckTest {
 
 
     /**
@@ -22,25 +20,15 @@ class CardDeckTest {
         CardDeck d = new CardDeck(1);
 
         // Populate the deck with cards using the placeCardOnBottom method
-        for (int i = 1; i < 5; i++) {d.placeCardOnBottom(new Card(i));}
+        for (int i = 1; i < 5; i++) {d.placeCardOnBottom(new ContinuousAssessment.Card(i));}
 
         // Return the deck
         return d;
     }
 
-    @Test
-    @Description("Test to check the ToString method output the correct data")
-    void testToString() {
-        // Initialise a new deck for testing
-        CardDeck testDeck = initDeck();
-
-        // Assertion test to check the value of the deck
-        assertEquals(String.valueOf(testDeck), "1 2 3 4 ");
-    }
-
-    @Test
+    @org.junit.Test
     @Description("Test to check cards are being taken from the top of the correct deck")
-    void testTakeCardFromTop() {
+    public void testTakeCardFromTop() {
         // Initialise a new deck for testing
         CardDeck testDeck = initDeck();
 
@@ -59,9 +47,9 @@ class CardDeckTest {
         assertNotEquals(valueBefore, actualOutput);
     }
 
-    @Test
+    @org.junit.Test
     @Description("Test to check cards are being placed on the bottom of the correct deck")
-    void testPlaceCardOnBottom() {
+    public void testPlaceCardOnBottom() {
         // Initialise a new deck for testing
         CardDeck testDeck = initDeck();
 
@@ -69,7 +57,7 @@ class CardDeckTest {
         String valueBefore = String.valueOf(testDeck);
 
         // Place a new card of the bottom of the deck
-        testDeck.placeCardOnBottom(new Card(10));
+        testDeck.placeCardOnBottom(new ContinuousAssessment.Card(10));
 
         // Define the expected output and the actual output
         String expectedOutput = "1 2 3 4 10 ";
@@ -80,5 +68,14 @@ class CardDeckTest {
         assertNotEquals(valueBefore, actualOutput);
     }
 
+    @org.junit.Test
+    @Description("Test to check the ToString method output the correct data")
+    public void testToString() {
+        // Initialise a new deck for testing
+        CardDeck testDeck = initDeck();
+
+        // Assertion test to check the value of the deck
+        assertEquals(String.valueOf(testDeck), "1 2 3 4 ");
+    }
 
 }
