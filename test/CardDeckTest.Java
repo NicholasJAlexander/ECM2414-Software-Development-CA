@@ -1,13 +1,9 @@
-package ContinuousAssessment;
-
+import ContinuousAssessment.Card;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Test class done using JUnit 5

@@ -1,4 +1,5 @@
-package ContinuousAssessment;
+import ContinuousAssessment.Card;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -170,7 +171,7 @@ public class Player extends CardDeck implements Runnable{
         this.logOutput(msg);
     }
 
-    void winOutput() {
+    public void winOutput() {
         // outputs win message to this player's file
         String pN = String.format("player " + this.playerNumber);
         String msg = pN + " wins\n" +
@@ -201,7 +202,7 @@ public class Player extends CardDeck implements Runnable{
         this.playerWon = true;
     }
 
-    boolean getPlayerWon() {
+    public boolean getPlayerWon() {
         // getter for playerWon
         return this.playerWon;
     }

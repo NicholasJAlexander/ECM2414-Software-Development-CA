@@ -1,4 +1,4 @@
-package ContinuousAssessment;
+import ContinuousAssessment.Card;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,7 +18,7 @@ public class CardDeck {
     protected Queue<Card> cards;
 
     // constructor for CardDeck, has only a deckNumber - no cards
-    CardDeck(int i) {
+    public CardDeck(int i) {
         this.cards = new LinkedList<>();
         this.deckNumber = i;
     }
