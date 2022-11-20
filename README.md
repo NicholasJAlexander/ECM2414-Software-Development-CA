@@ -8,20 +8,22 @@ This is a card game that is played automatically on the command line
 ### Task specification
 
 The game has n players, each numbered 1 to n, with n being a positive integer, and n decks of cards again numbers 1 to n.
-Each player will hold a hand of 4 cards. Boths of these hands and decks will be drawn from a pack which contains 8n cards.
+Each player will hold a hand of 4 cards. Both of these hands and decks will be drawn from a pack which contains 8n cards.
 Each card has a face value (denomination) of a non-negative integer.
 
 The decks and players will form a ring topology. As seen below
+
+![img.png](doc/topological%20relationship.png)
 
 To win the game, a player needs four cards of the same value in their hand. 
 If a player is given four cards which are all the same value at the start of the gane, they should immediately declare this
 and that players should then notify the other player threads.
 
-If the game is not won imeediately, then the game progressess as follows:
+If the game is not won immediately, then the game progresses as follows:
 - Each player picks a card from the top of the deck to their left
 - Discards a card from their deck to the bottom of the deck to their right
 
-This process will contine until a player declares that they have four cards of the same value.
+This process will continue until a player declares that they have four cards of the same value.
 
 ### Developing a solution
 
@@ -54,3 +56,8 @@ Testing for this program has been developed in JUnit 5. These tests can be run u
 
 
 
+# Authors
+- Nicholas Alexander
+- James Calnan
+
+# License
