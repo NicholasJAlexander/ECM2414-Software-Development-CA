@@ -61,3 +61,4 @@ Testing for this program has been developed in JUnit 5. These tests can be run u
 - James Calnan
 
 # License
+MIT License
