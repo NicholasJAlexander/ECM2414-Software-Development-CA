@@ -33,7 +33,7 @@ The pack file must be valid and contain enough cards for the game to start.
 The actions that the player takes should be outputted to a text file, for example: 
 ```
 player 1 draws a 4 from deck 1
-player 1 discards a 3 to deck2
+player 1 discards a 3 to deck 2
 player 1 current hand is 1 1 2 4
 ```
 
