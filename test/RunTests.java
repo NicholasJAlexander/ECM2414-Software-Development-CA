@@ -16,6 +16,12 @@ import java.io.PrintStream;
         PlayerTest.class
 })
 
+/**
+ * Test class done using JUnit 4.13.1
+ *
+ * @author James Calnan & Nicholas Alexander
+ * @version 1.0
+ */
 public class RunTests {
     public static void main(String[] args) {
         // Notify user that tests are being run

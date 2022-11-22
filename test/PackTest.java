@@ -7,7 +7,10 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Test class done using JUnit 5
+ * Test class done using JUnit 4.13.1
+ *
+ * @author James Calnan & Nicholas Alexander
+ * @version 1.0
  */
 public class PackTest {
 

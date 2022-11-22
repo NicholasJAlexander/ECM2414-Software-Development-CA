@@ -11,7 +11,10 @@ import java.util.Queue;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Test class done using JUnit 5
+ * Test class done using JUnit 4.13.1
+ *
+ * @author James Calnan & Nicholas Alexander
+ * @version 1.0
  */
 public class PlayerTest {
 

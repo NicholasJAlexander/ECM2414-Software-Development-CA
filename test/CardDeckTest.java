@@ -1,10 +1,10 @@
 import jdk.jfr.Description;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Test class done using JUnit 5
+ * Test class done using JUnit 4.13.1
  *
  * @author James Calnan & Nicholas Alexander
  * @version 1.0
