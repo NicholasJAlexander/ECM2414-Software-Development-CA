@@ -85,13 +85,23 @@ public class CardGame {
     }
 
     public static void main(String[] args) {
+        boolean wrong_input = true;
+        int n = 0;
         try {
             // Create buffer reader for taking input from console
             BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
 
-            // Take input of number of players
-            System.out.println("Enter the number of desired players here: ");
-            int n = Integer.parseInt(bReader.readLine());
+            do {
+                try {
+                    // Take input of number of players
+                    System.out.println("Enter the number of desired players here: ");
+                    n = Integer.parseInt(bReader.readLine());
+                    wrong_input  = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Number of players entered is not an integer");
+                    wrong_input = false;
+                }
+            } while (!wrong_input);
 
             // Take input of pack file
             Pack p = new Pack(n,bReader, "");
