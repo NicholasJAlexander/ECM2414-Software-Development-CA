@@ -37,13 +37,6 @@ public class CardDeck {
         this.cards.add(c);
     }
 
-    /*
-    public int size() {
-        return this.cards.size();
-    }
-
-     */
-
     public String toString(){
         // string contains this decks cards (not ordered)
         String cardsStr = "";
@@ -53,17 +46,10 @@ public class CardDeck {
         return cardsStr;
     }
 
-    /*
-    public Queue<Card> getCards() {
-        // getter for cards
-        return cards;
-    }
-
-     */
 
     protected void outputToFile() {
         String saveLocation = "Logs" + File.separator + "deck" + this.deckNumber + "_output.txt";
-        String outputMsg = "deck" + this.deckNumber + " contents: " + this;
+        String outputMsg = "deck " + this.deckNumber + " contents: " + this;
         try {
             // create file variable
             File logFile = new File(saveLocation);
