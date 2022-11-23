@@ -42,16 +42,16 @@ player 1 current hand is 1 1 2 4
 To run the game you will need to execute the compiled jar file `ECM2414-Software-Development-CA.jar`, this can be done by following these steps:
 
 1. Open a command line interface such as powershell
-2. Type `java -jar .\ECM2414-Software-Development-CA.jar`
+2. Type `java -jar .\cards.jar`
 3. You will then be prompted to input the number of players (e.g. 4)
 4. You will then be asked for the filename of the pack, you will need to provide the full path of the pack file
 5. The program will then run and the outputs will be in a directory call `Logs` which will be in the directory that you ran the jar file in
 
 ### Running JUnit tests
-Testing for this program has been developed in JUnit 5. These tests can be run using the jar file:
+Testing for this program has been developed in JUnit 4.13.1. These tests can be run using the jar file:
 
 1. Open a command line interface such as powershell
-2. Type `java -cp .\ECM2414-Software-Development-CA.jar RunTests`
+2. Type `java -cp .\cards.jar RunTests`
 3. The output of the tests will then be printed to the console window
 
 

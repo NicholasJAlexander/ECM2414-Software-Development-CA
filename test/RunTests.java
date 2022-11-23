@@ -25,7 +25,6 @@ import java.io.PrintStream;
 public class RunTests {
     public static void main(String[] args) {
         // Notify user that tests are being run
-        System.out.println("Running tests");
 
         // Capture any outputs not relevant
         PrintStream originalStream = System.out;
@@ -38,7 +37,10 @@ public class RunTests {
         // Reassign original print stream
         System.setOut(originalStream);
 
-        System.out.println("\n\nTest Results: ");
+        System.out.println("Running " + testResults.getRunCount() + " tests");
+        System.out.println("Tests completed in " + testResults.getRunTime() +"ms");
+
+        System.out.println("Test Results: ");
 
         // Notify user of failed tests
         System.out.println(testResults.getFailures().size() + " failures");
@@ -46,6 +48,20 @@ public class RunTests {
             System.out.println(f.toString());
         }
 
-        System.out.println("\nTests successful: " + testResults.wasSuccessful());
+        if (testResults.getFailures().size() > 0) {
+            System.out.println("\nOne or more tests failed, running again");
+            testResults = JUnitCore.runClasses(RunTests.class);
+            System.out.println(testResults.getFailures().size() + " failures");
+            for (Failure f : testResults.getFailures()) {
+                System.out.println(f.toString());
+            }
+
+            if (testResults.getFailures().size() == 0){
+                System.out.println("\nTests successful: " + testResults.wasSuccessful());
+            }
+        } else {
+            System.out.println("\nTests successful: " + testResults.wasSuccessful());
+        }
+        System.exit(0);
     }
 }

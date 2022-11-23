@@ -13,15 +13,6 @@ public class CardGame {
         // deals the cards in pack p, creates the n players and n decks
         dealCards(n, pack);
 
-        /*
-        for (Player individualPlayer : this.players) {
-            System.out.println(individualPlayer);
-        }
-        for (CardDeck individualDeck : this.decks) {
-            System.out.println(individualDeck);
-        }
-        */
-
         // this needs to go before starting the threads, otherwise players will start playing,
         // even if one of the player initially wins
         for (Player p: this.players) {

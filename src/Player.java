@@ -1,13 +1,12 @@
 import ContinuousAssessment.Card;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Queue;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Player extends CardDeck implements Runnable{
@@ -82,6 +81,10 @@ public class Player extends CardDeck implements Runnable{
     }
 
     void discardCardToDeck() {
+        // If the player deck is empty then there's nothing to discard
+        if (this.cards.size() == 0) {
+            return;
+        }
         // cycles players cards to avoid discarding a preferred card
         while (this.cards.peek().getValue() == this.playerNumber) {
             // removes card from top and places on bottom of deck, this only happens if
@@ -96,6 +99,7 @@ public class Player extends CardDeck implements Runnable{
 
         // print discard info
         String discardMsg = String.format("player %d discards a %d to deck %d", this.playerNumber, discard.getValue(), this.rightDeck.deckNumber);
+
         logOutput(discardMsg);
     }
 
@@ -219,6 +223,10 @@ public class Player extends CardDeck implements Runnable{
             cardsStr += i+" ";
         }
         return cardsStr;
+    }
+
+    int deckSize() {
+        return this.cards.size();
     }
 
     // overrides run() method in Runnable
