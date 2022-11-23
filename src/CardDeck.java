@@ -27,12 +27,12 @@ public class CardDeck {
         this.cards = new LinkedList<>();
     }
 
-    protected Card takeCardFromTop() {
+    synchronized Card takeCardFromTop() {
         // take card from the top of the deck
         return this.cards.poll();
     }
 
-    protected void placeCardOnBottom(Card c) {
+    synchronized void placeCardOnBottom(Card c) {
         // places card to the bottom of the deck
         this.cards.add(c);
     }
